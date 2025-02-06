@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Adicionar Serviços</h1>
+        <div class="content">
+            <div class="request">
+                <div class="requestcontent">
+                    <select name="selectRequest" id="selectRequest">
+                        <option value="Cilene" selected>Cilene</option>
+                        <option value="Daniel">Daniel</option>
+                    </select>
+                    <input type="number" id="money" placeholder="R$">
+                </div>
+            </div>
+
+            <div class="servicecontent">
+                <input id="serviceInput" type="text" placeholder="Serviço" />
+                <button id="addserviceBtn">Adicionar</button>
+            </div>
+        </div>
+        <div id="serviceList">
+            <!-- <div class="service media">
+                <span>R$2.50 - Solicitante</span>
+                <p>Lavar-Louça</p>
+                
+                
+                <div class="serviceBtn">
+                    <button class="edit">✏️</button>
+                    <button class="delete">🗑️</button>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+    <script type="module" src="script.js" defer></script>
+</body>
+</html>

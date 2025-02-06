@@ -1,0 +1,96 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+h1 {
+    text-align: center;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.requestcontent {
+    display: flex;
+    gap: 5px;
+}
+#money,
+#serviceInput {
+    width: 294px;
+    padding: 3px 0px;
+}
+.service {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-transform: capitalize;
+}
+#serviceInput {
+    width: 280px;
+}
+.serviceBtn {
+    display: flex;
+    gap: 5px;
+}
+span {
+    font-weight: bold;
+}
+button {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#addserviceBtn {
+    background: #ff6b6b;
+    padding: 5px 10px;
+    color: white;
+}
+.delete,
+.edit {
+    padding: 2.5px 5px;
+}
+#addserviceBtn:hover{
+    background: #ff4b4b;
+}
+#addserviceBtn:active {
+    background: #ff3636;
+}
+.edit:hover {
+    background-color: #c4c400
+}
+.edit:active {
+    background-color: #949401;
+}
+.delete:hover {
+    background: #646464;
+}
+.delete:active {
+    background: #3a3a3a;
+}
