@@ -32,21 +32,20 @@ function addServiceList () {
     newElement(newDivBtnAcoes, 'button', '🗑️', 'delete')
 }
 
-function BtnEdit(service) {
-    
-}
-
-document.querySelector("#serviceList").addEventListener("click", function(event) {
-    if (event.target && event.target.classList.contains("edit")) {
-        console.log("Botão dinâmico dentro do container foi clicado!");
-        Remover(event.target.closest('tr'))
-        const newP = document.querySelector('.service>p')
+function Edit(service) {
+    const newP = document.querySelector('.service>p')
         const newServiceText = prompt("Edite o serviço:", newP.textContent)
         if (newServiceText !== null && newServiceText.trim() !== "") {
             newP.textContent = newServiceText.trim()
         } else if (newServiceText !== null) {
             alert("O serviço não pode ficar em branco.")
         }
+}
+
+document.querySelector("#serviceList").addEventListener("click", function(event) {
+    if (event.target && event.target.classList.contains("edit")) {
+        console.log("Botão dinâmico dentro do container foi clicado!");
+        Edit(event.target.closest('p'))
     }
 });
 
