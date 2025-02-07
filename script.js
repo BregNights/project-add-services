@@ -22,14 +22,14 @@ function addServiceList () {
     const money = parseFloat(document.querySelector('#money').value)
     const service = document.querySelector('#serviceInput').value
     const servicesList = document.querySelector('#serviceList')
-
-    const newDivService = newElement(servicesList, 'div', "", 'service', 'media')
-    newElement(newDivService, 'span', `R$${money.toFixed(2)} - ${selectRequest}`)
-    newElement(newDivService, 'p', service)
-    
-    const newDivBtnAcoes = newElement(newDivService, 'div', "", 'serviceBtn')
-    newElement(newDivBtnAcoes, 'button', '✏️', 'edit')
-    newElement(newDivBtnAcoes, 'button', '🗑️', 'delete')
+    servicesList.innerHTML = `<div class="service">
+                                        <span>R$${money.toFixed(2)} - ${selectRequest}</span>
+                                        <p>${service}</p>
+                                        <div class="serviceBtn">
+                                            <button class="edit">✏️</button>
+                                            <button class="delete">🗑️</button>
+                                        </div>
+                                    </div>`
 }
 
 async function editDataBase(id, newService) {
@@ -101,14 +101,6 @@ document.querySelector("#serviceList").addEventListener("click", function(event)
     }
 })
 
-function newElement (local, element, text="", className="", className2="") {
-    const newElement = document.createElement(element)
-    if (text.trim() !== "") newElement.innerText = text
-    if (className.trim() !== "") newElement.classList.add(className)
-    if (className2.trim() !== "") newElement.classList.add(className2)
-    return local.appendChild(newElement)
-}
-
 async function saveDataBase () {
     const money = parseFloat(document.getElementById('money').value)
     const service = document.querySelector('#serviceInput').value
@@ -156,22 +148,28 @@ async function loadData () {
 document.getElementById('addserviceBtn').addEventListener('click', () =>{
     const money = parseFloat(document.getElementById('money').value)
     const service = document.querySelector('#serviceInput').value
-    // if (!money || service === '') {
-    //     alert('Valor inválido')
-    //     return
-    // }
-    addServiceList()
-    saveDataBase()
-    document.getElementById('money').value = ''
-    document.getElementById('serviceInput').value = ''
+    try {
+        if (!money || service === '') {
+            alert('Valor inválido')
+            return
+        }
+        addServiceList()
+        saveDataBase()
+        loadData()
+        document.getElementById('money').value = ''
+        document.getElementById('serviceInput').value = ''
+    } catch(error) {
+        console.error("Erro:", error)
+    }
 })
 
-document.getElementById('money').addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-        const addserviceBtn = document.getElementById('addserviceBtn')
-        event.preventDefault()
-        addserviceBtn.click()
-    }
+document.querySelectorAll('#money, #serviceInput').forEach(input => {
+    input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault()
+            document.getElementById('addserviceBtn').click()
+        }
+    })
 })
 
 document.addEventListener("DOMContentLoaded", loadData)
