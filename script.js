@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js'
-import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, addDoc } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js'
+import { getFirestore, collection, doc, getDocs, deleteDoc, addDoc } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js'
 
 const firebaseConfig = {
     apiKey: "AIzaSyCaTr2auup8jwxvCPJSqgBdsf_gsIxF7sw",
@@ -42,28 +42,46 @@ function Edit(service) {
         }
 }
 
+//Editar
 document.querySelector("#serviceList").addEventListener("click", function(event) {
     if (event.target && event.target.classList.contains("edit")) {
         console.log("Botão dinâmico dentro do container foi clicado!");
-        Edit(event.target.closest('p'))
+        Edit(event.target.closest('.service'))
     }
 });
 
-async function Delete(divService) {
-    if (confirm('Tem certeza que deseja remover esta linha?')) {
-        try {
-        // await deleteDoc(doc(db, "service", idDocumento))
-        //todo
-        divService.remove()
-        } catch (error) {
-            console.error("Erro ao remover o documento:", error)
-        }
+async function deleteDataBase(id) {
+    try {
+        await deleteDoc(doc(db,"services", id))
+    } catch (error) {
+        console.error("Erro ao remover o documento do banco de dados:", error)
     }
 }
 
+function deleteFront(Service) {
+    try {
+        Service.remove()
+    } catch (error) {
+        console.error("Erro ao remover o documento:", error)
+    }
+    
+}
+
+//Delete
 document.querySelector("#serviceList").addEventListener("click", function(event) {
     if (event.target && event.target.classList.contains("delete")) {
-        Delete(event.target.closest('.service'))
+        if (confirm('Tem certeza que deseja remover esta linha?')) {
+            try {
+                const serviceElement = event.target.closest('.service')
+                const id = serviceElement.getAttribute("data-id")
+        
+                deleteFront(serviceElement)
+                deleteDataBase(id)
+            } catch (error) {
+                console.error("Erro ao remover o documento:", error)
+            }
+        }
+        
     }
 })
 
@@ -97,26 +115,23 @@ async function saveDataBase () {
 
 async function loadData () {
     const servicesList = document.querySelector('#serviceList')
+    servicesList.innerHTML = ""
 
     try {
     const querySnapshot = await getDocs(collection(db, "services"))
         querySnapshot.forEach((doc) => {
             const data = doc.data()
-
-            const newDivService = newElement(servicesList, 'div', "", 'service', 'media')
-
-            const newSpan = newElement(newDivService, 'span', `R$${data.price.toFixed(2)} - ${data.employer}`)
-
-            const newP = newElement(newDivService, 'p', data.service)
-
-            const newDivBtnAcoes = newElement(newDivService, 'div', "", 'serviceBtn')
-
-            const newBtnEdit = newElement(newDivBtnAcoes, 'button', '✏️', 'edit')
-
-            const newBtnDelete = newElement(newDivBtnAcoes, 'button', '🗑️', 'delete')
-
+            const id = doc.id
+            
+            servicesList.innerHTML += `<div class="service" data-id="${id}">
+                                        <span>R$${data.price.toFixed(2)} - ${data.employer}</span>
+                                        <p>${data.service}</p>
+                                        <div class="serviceBtn">
+                                            <button class="edit">✏️</button>
+                                            <button class="delete">🗑️</button>
+                                        </div>
+                                    </div>`
         })
-
     } catch (error) {
         console.error("Erro ao carregar dados:", error)
     }
