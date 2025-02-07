@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js'
-import { getFirestore, collection, doc, getDocs, deleteDoc, addDoc } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js'
+import { getFirestore, collection, doc, getDocs, updateDoc, deleteDoc, addDoc } from 'https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js'
 
 const firebaseConfig = {
     apiKey: "AIzaSyCaTr2auup8jwxvCPJSqgBdsf_gsIxF7sw",
@@ -8,7 +8,7 @@ const firebaseConfig = {
     storageBucket: "project-add-services.firebasestorage.app",
     messagingSenderId: "977236101788",
     appId: "1:977236101788:web:6ef57d77eb37833782bb59"
-  };
+}
 
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
@@ -32,23 +32,41 @@ function addServiceList () {
     newElement(newDivBtnAcoes, 'button', '🗑️', 'delete')
 }
 
-function Edit(service) {
-    const newP = document.querySelector('.service>p')
-        const newServiceText = prompt("Edite o serviço:", newP.textContent)
-        if (newServiceText !== null && newServiceText.trim() !== "") {
-            newP.textContent = newServiceText.trim()
-        } else if (newServiceText !== null) {
-            alert("O serviço não pode ficar em branco.")
-        }
+async function editDataBase(id, newService) {
+    try {
+        const serviceData = doc(db, "services", id)
+        await updateDoc(serviceData, {
+            service: newService
+        })
+        alert('Serviço atualizado com sucesso!')
+    }catch(error) {
+        console.log('Erro ao atualizar o serviço:', error)
+    }
+
 }
 
-//Editar
+function editFront(serviceElement) {
+    const p = serviceElement.querySelector("p")
+    const id = serviceElement.getAttribute("data-id")
+    const currentService = p.textContent
+    const newService = prompt("Edite a descrição do serviço", currentService)
+
+    if(newService !== null) {
+        p.textContent = newService.trim()
+        editDataBase(id, newService.trim())
+    }
+}
+
 document.querySelector("#serviceList").addEventListener("click", function(event) {
     if (event.target && event.target.classList.contains("edit")) {
-        console.log("Botão dinâmico dentro do container foi clicado!");
-        Edit(event.target.closest('.service'))
+        try {
+            const serviceElement = event.target.closest('.service')
+            editFront(serviceElement)
+        }catch (error) {
+            console.error("Erro", error)
+        }
     }
-});
+})
 
 async function deleteDataBase(id) {
     try {
@@ -64,10 +82,8 @@ function deleteFront(Service) {
     } catch (error) {
         console.error("Erro ao remover o documento:", error)
     }
-    
 }
 
-//Delete
 document.querySelector("#serviceList").addEventListener("click", function(event) {
     if (event.target && event.target.classList.contains("delete")) {
         if (confirm('Tem certeza que deseja remover esta linha?')) {
